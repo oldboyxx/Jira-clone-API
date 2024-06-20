@@ -30,16 +30,16 @@ const defaultProps = {
 
 const Button = forwardRef(
   ({ children, variant, icon, iconSize, disabled, isWorking, onClick, ...buttonProps }, ref) => {
-    const handleClick = () => {
+    const handleClick = (e) => {
       if (!disabled && !isWorking) {
-        onClick();
+        onClick(e);
       }
     };
 
     return (
       <StyledButton
         {...buttonProps}
-        onClick={handleClick}
+        onClick={(e)=> handleClick(e)}
         variant={variant}
         disabled={disabled || isWorking}
         isWorking={isWorking}
