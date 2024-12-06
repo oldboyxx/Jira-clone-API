@@ -1,6 +1,7 @@
 {
   "name": "jira_clone",
   "version": "1.0.0",
+  "private": true,
   "author": "Ivor Reic",
   "license": "MIT",
   "scripts": {

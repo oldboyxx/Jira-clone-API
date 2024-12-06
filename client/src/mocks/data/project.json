@@ -1,0 +1,150 @@
+{
+  "project": {
+    "id": 329014,
+    "name": "singularity 1.0",
+    "url": "https://www.atlassian.com/software/jira",
+    "description": "Plan, track, and manage your agile and software development projects in Jira. Customize your workflow, collaborate, and release great software.",
+    "category": "software",
+    "createdAt": "2024-12-03T20:15:33.833Z",
+    "updatedAt": "2024-12-03T20:15:33.833Z",
+    "users": [
+      {
+        "id": 987778,
+        "name": "Pickle Rick",
+        "email": "rick@jira.guest",
+        "avatarUrl": "https://i.ibb.co/7JM1P2r/picke-rick.jpg",
+        "createdAt": "2024-12-03T20:15:33.823Z",
+        "updatedAt": "2024-12-03T20:15:33.833Z",
+        "projectId": 329014
+      },
+      {
+        "id": 987779,
+        "name": "Baby Yoda",
+        "email": "yoda@jira.guest",
+        "avatarUrl": "https://i.ibb.co/6n0hLML/baby-yoda.jpg",
+        "createdAt": "2024-12-03T20:15:33.821Z",
+        "updatedAt": "2024-12-03T20:15:33.833Z",
+        "projectId": 329014
+      },
+      {
+        "id": 987780,
+        "name": "Lord Gaben",
+        "email": "gaben@jira.guest",
+        "avatarUrl": "https://i.ibb.co/6RJ5hq6/gaben.jpg",
+        "createdAt": "2024-12-03T20:15:33.827Z",
+        "updatedAt": "2024-12-03T20:15:33.833Z",
+        "projectId": 329014
+      }
+    ],
+    "issues": [
+      {
+        "id": 2706539,
+        "title": "This is an issue of type: Task.",
+        "type": "task",
+        "status": "backlog",
+        "priority": "4",
+        "listPosition": 1,
+        "createdAt": "2024-12-03T20:15:33.849Z",
+        "updatedAt": "2024-12-03T20:15:33.849Z",
+        "userIds": [
+          987778
+        ]
+      },
+      {
+        "id": 2706541,
+        "title": "Try dragging issues to different columns to transition their status.",
+        "type": "story",
+        "status": "backlog",
+        "priority": "3",
+        "listPosition": 3,
+        "createdAt": "2024-12-03T20:15:33.849Z",
+        "updatedAt": "2024-12-03T20:15:33.849Z",
+        "userIds": []
+      },
+      {
+        "id": 2706542,
+        "title": "Each issue can be assigned priority from lowest to highest.",
+        "type": "task",
+        "status": "selected",
+        "priority": "5",
+        "listPosition": 5,
+        "createdAt": "2024-12-03T20:15:33.881Z",
+        "updatedAt": "2024-12-03T20:15:33.881Z",
+        "userIds": []
+      },
+      {
+        "id": 2706543,
+        "title": "You can use rich text with images in issue descriptions.",
+        "type": "story",
+        "status": "backlog",
+        "priority": "1",
+        "listPosition": 4,
+        "createdAt": "2024-12-03T20:15:33.882Z",
+        "updatedAt": "2024-12-03T20:15:33.882Z",
+        "userIds": [
+          987780
+        ]
+      },
+      {
+        "id": 2706545,
+        "title": "You can track how many hours were spent working on an issue, and how many hours remain.",
+        "type": "task",
+        "status": "inprogress",
+        "priority": "1",
+        "listPosition": 7,
+        "createdAt": "2024-12-03T20:15:33.911Z",
+        "updatedAt": "2024-12-03T20:15:33.911Z",
+        "userIds": []
+      },
+      {
+        "id": 2706546,
+        "title": "Try leaving a comment on this issue.",
+        "type": "task",
+        "status": "done",
+        "priority": "3",
+        "listPosition": 7,
+        "createdAt": "2024-12-03T20:15:33.912Z",
+        "updatedAt": "2024-12-03T20:15:33.912Z",
+        "userIds": [
+          987779
+        ]
+      },
+      {
+        "id": 2706544,
+        "title": "Each issue has a single reporter but can have multiple assignees.",
+        "type": "story",
+        "status": "inprogress",
+        "priority": "4",
+        "listPosition": 8,
+        "createdAt": "2024-12-03T20:15:33.902Z",
+        "updatedAt": "2024-12-03T20:30:19.243Z",
+        "userIds": [
+          987779,
+          987780
+        ]
+      },
+      {
+        "id": 2706540,
+        "title": "Click on an issue to see what's behind it.",
+        "type": "task",
+        "status": "selected",
+        "priority": "2",
+        "listPosition": 6,
+        "createdAt": "2024-12-03T20:15:33.849Z",
+        "updatedAt": "2024-12-04T21:55:03.993Z",
+        "userIds": [
+          987778
+        ]
+      }
+    ]
+  },
+  "currentUser": {
+    "id": 987780,
+    "name": "Lord Gaben",
+    "email": "gaben@jira.guest",
+    "avatarUrl": "https://i.ibb.co/6RJ5hq6/gaben.jpg",
+    "createdAt": "2024-12-03T20:15:33.827Z",
+    "updatedAt": "2024-12-03T20:15:33.833Z",
+    "projectId": 329014
+  }
+}

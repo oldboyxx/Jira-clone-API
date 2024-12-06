@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: 'development',
@@ -48,6 +49,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src/index.html'),
       favicon: path.join(__dirname, 'src/favicon.png'),
+    }),
+    new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_MSW': JSON.stringify(true),
+      'process.env.NODE_ENV': JSON.stringify('development'),
     }),
   ],
 };
