@@ -136,6 +136,16 @@
           987778
         ]
       }
+    ],
+    "comments": [
+      {
+        "id": 2668110,
+        "body": "Everything I touch\nwith tenderness, alas,\npricks like a bramble.",
+        "createdAt": "2024-12-03T20:15:33.934Z",
+        "updatedAt": "2024-12-03T20:15:33.934Z",
+        "userId": 987780,
+        "issueId": 2706546
+      }
     ]
   },
   "currentUser": {

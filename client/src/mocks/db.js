@@ -46,6 +46,14 @@ export const db = factory({
         updatedAt: String,
         projectId: Number,
     },
+    comment: {
+        id: primaryKey(datatype.number),
+        body: String,
+        createdAt: String,
+        updatedAt: String,
+        userId: Number,
+        issueId: Number,
+    },
 });
 
 const saveToLocalStorage = () => {
@@ -103,6 +111,12 @@ export const loadInitialData = () => {
 
     if (!db.currentUser.count()) {
         db.currentUser.create(projectData.currentUser);
+    }
+
+    if (!db.comment.count()) {
+        projectData.project.comments.forEach(comment => {
+            db.comment.create(comment);
+        });
     }
 };
 
