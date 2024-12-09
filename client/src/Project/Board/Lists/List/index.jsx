@@ -69,7 +69,7 @@ const filterIssues = (projectIssues, filters, currentUserId) => {
 };
 
 const getSortedListIssues = (issues, status) =>
-  issues.filter(issue => issue.status === status).sort((a, b) => a.listPosition - b.listPosition);
+  issues.filter(issue => issue.status.toLowerCase() === status.toLowerCase()).sort((a, b) => a.listPosition - b.listPosition);
 
 const formatIssuesCount = (allListIssues, filteredListIssues) => {
   if (allListIssues.length !== filteredListIssues.length) {

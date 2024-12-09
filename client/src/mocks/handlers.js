@@ -39,8 +39,8 @@ export const handlers = [
 
             const populatedIssue = {
                 ...issue,
-                users: issue.userIds.map(userId => db.currentUser.findFirst({ where: { id: { equals: userId } } })),
-                comments: comments,
+                users: issue.userIds.map(userId => db.user.findFirst({ where: { id: { equals: userId } } })),
+                comments,
             };
             return res(ctx.json({ issue: populatedIssue }));
         }
@@ -65,7 +65,7 @@ export const handlers = [
     }),
     rest.get('http://localhost:3000/project', (req, res, ctx) => {
         const project = db.project.getAll()[0];
-        return res(ctx.json({ project }));
+        return res(ctx.json({project}));
     }),
     rest.put('http://localhost:3000/project', (req, res, ctx) => {
         const updatedProject = db.project.update({

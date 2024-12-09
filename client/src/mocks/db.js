@@ -4,9 +4,15 @@
 import { factory, primaryKey } from "@mswjs/data";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { datatype } from "faker";
-import projectData from './data/project.json';
+import guestAccountData from './data/guest-account.json';
 
 export const db = factory({
+    user: {
+        id: primaryKey(datatype.number),
+        email: String,
+        name: String,
+        avatarUrl: String,
+    },
     issue: {
         id: primaryKey(datatype.number),
         title: String,
@@ -15,15 +21,16 @@ export const db = factory({
         priority: String,
         listPosition: Number,
         description: String,
-        reporterId: Number,
-        projectId: Number,
-        users: Array,
         descriptionText: String,
         estimate: Number,
         timeSpent: Number,
         timeRemaining: Number,
         createdAt: String,
         updatedAt: String,
+        reporterId: Number,
+        projectId: Number,
+        users: Array,
+        comments: Array,
         userIds: Array,
     },
     project: {
@@ -57,66 +64,91 @@ export const db = factory({
 });
 
 const saveToLocalStorage = () => {
-    const project = db.project.getAll()[0];
-    localStorage.setItem('project', JSON.stringify(project));
+    const data = {
+        project: db.project.getAll()[0],
+        users: db.user.getAll(),
+        issues: db.project.getAll()[0].issues, // Hack: for some reason issues.getAll() strips arrays
+        comments: db.comment.getAll(),
+        currentUser: db.currentUser.getAll(),
+    };
+    localStorage.setItem('db', JSON.stringify(data));
 };
 
 const loadFromLocalStorage = () => {
-    const project = JSON.parse(localStorage.getItem('project'));
-    if (project) {
-        createProjectFromData(project);
+    const data = JSON.parse(localStorage.getItem('db'));
+    if (data) {
+        createGuestAccountFromData(data);
     }
 };
 
+const createGuestAccountFromData = (data) => {
+    if (data.project) {
+        if (!db.project.findFirst({ where: { id: { equals: data.project.id } } })) {
+            db.project.create(data.project);
+        }
+    }
 
-const createProjectFromData = (project) => {
-    const createdProject = db.project.create({
-        id: project.id,
-        name: project.name,
-        url: project.url,
-        description: project.description,
-        category: project.category,
-        createdAt: project.createdAt,
-        updatedAt: project.updatedAt,
-        users: [],
-        issues: [],
-    });
+    if (data.users) {
+        data.users.forEach(user => {
+            if (!db.user.findFirst({ where: { id: { equals: user.id } } })) {
+                const newUser = db.user.create(user);
+                const project = db.project.getAll()[0]; // Assuming there is at least one project
+                if (project) {
+                    project.users.push(newUser);
+                    db.project.update({
+                        where: { id: { equals: project.id } },
+                        data: { users: project.users },
+                    });
+                }
+            }
+        });
+    }
 
-    project.users.forEach(user => {
-        const createdUser = db.currentUser.create(user);
-        createdProject.users.push(createdUser);
-    });
+    if (data.issues) {
+        data.issues.forEach(issue => {
+            if (!db.issue.findFirst({ where: { id: { equals: issue.id } } })) {
+                const createdIssue = db.issue.create(issue);
+                issue.userIds.forEach(userId => {
+                    const user = db.user.findFirst({ where: { id: { equals: userId } } });
+                    if (user) {
+                        createdIssue.users.push(user);
+                        createdIssue.userIds.push(userId);
+                    }
+                });
+                const project = db.project.getAll()[0]; // Assuming there is at least one project
+                if (project) {
+                    project.issues.push(createdIssue);
+                    db.project.update({
+                        where: { id: { equals: project.id } },
+                        data: { issues: project.issues },
+                    });
+                }
+            }
+        });
+    }
 
-    project.issues.forEach(issue => {
-        const createdIssue = db.issue.create(issue);
-        createdProject.issues.push(createdIssue);
-    });
+    if (data.comments) {
+        data.comments.forEach(comment => {
+            if (!db.comment.findFirst({ where: { id: { equals: comment.id } } })) {
+                db.comment.create(comment);
+            }
+        });
+    }
 
-    db.project.update({
-        where: { id: { equals: createdProject.id } },
-        data: {
-            users: createdProject.users,
-            issues: createdProject.issues,
-        },
-    });
+    if (data.currentUser) {
+        const currentUser = data.users.find(user => user.id === data.currentUser);
+        if (currentUser && !db.currentUser.findFirst({ where: { id: { equals: currentUser.id } } })) {
+            db.currentUser.create(currentUser);
+        }
+    }
 };
 
 export const loadInitialData = () => {
     loadFromLocalStorage();
 
     if (!db.project.count()) {
-        createProjectFromData(projectData.project);
+        createGuestAccountFromData(guestAccountData);
         saveToLocalStorage();
-    }
-
-    if (!db.currentUser.count()) {
-        db.currentUser.create(projectData.currentUser);
-    }
-
-    if (!db.comment.count()) {
-        projectData.project.comments.forEach(comment => {
-            db.comment.create(comment);
-        });
     }
 };
 
@@ -141,7 +173,7 @@ export const createIssue = ({ type, title, description, reporterId, userIds, pri
         updatedAt: new Date().toISOString(),
     });
 
-    const project = db.project.findFirst({ where: { id: { equals: projectId } } });
+    const project = db.project.getAll()[0];
     if (project) {
         users.forEach(user => {
             const existingUser = project.users.find(projUser => projUser.id === user.id);
@@ -161,4 +193,38 @@ export const createIssue = ({ type, title, description, reporterId, userIds, pri
     saveToLocalStorage();
 
     return newIssue;
+};
+
+export const exportDatabase = () => {
+    const data = {
+        issues: db.issue.getAll(),
+        projects: db.project.getAll(),
+        currentUser: db.currentUser.getAll(),
+        comments: db.comment.getAll(),
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'database.json';
+    a.click();
+    URL.revokeObjectURL(url);
+};
+
+export const importDatabase = (file) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const data = JSON.parse(event.target.result);
+        db.issue.clear();
+        db.project.clear();
+        db.currentUser.clear();
+        db.comment.clear();
+        data.issues.forEach(issue => db.issue.create(issue));
+        data.projects.forEach(project => db.project.create(project));
+        data.currentUser.forEach(user => db.currentUser.create(user));
+        data.comments.forEach(comment => db.comment.create(comment));
+        saveToLocalStorage();
+    };
+    reader.readAsText(file);
 };
